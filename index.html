@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Alguém Especial ✨</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Bodoni Moda para cabeçalhos elegantes, Manrope para legibilidade moderna -->
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,600;1,6..96,400;1,6..96,600&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Paleta Eterea e Noturna */
+            --bg-base: #050408;
+            --text-primary: #F7F5F0;
+            --text-secondary: #B4A9C0;
+            
+            /* Cores de Destaque */
+            --accent-rose: #C8829C;
+            --accent-gold: #D6A87C;
+            
+            /* Vidro e Bordas */
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-highlight: rgba(255, 255, 255, 0.15);
+            
+            --transition-smooth: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none; /* Esconde o cursor padrão para usar o personalizado */
+        }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* -------------------------
+           FILTRO DE GRÃO CINEMÁTICO
+        -------------------------- */
+        .noise-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* -------------------------
+           FUNDO AMBIENTE (AURORA)
+        -------------------------- */
+        .ambient-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            background: var(--bg-base);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.7;
+            animation: float 25s infinite alternate ease-in-out;
+        }
+
+        .orb:nth-child(1) {
+            width: 60vw; height: 60vw;
+            background: #5a183a; /* Framboesa Escuro */
+            top: -20%; left: -10%;
+        }
+
+        .orb:nth-child(2) {
+            width: 50vw; height: 50vw;
+            background: #101c4a; /* Azul Noturno */
+            bottom: -10%; right: -20%;
+            animation-delay: -10s;
+        }
+
+        .orb:nth-child(3) {
+            width: 40vw; height: 40vw;
+            background: #543719; /* Cobre Mudo */
+            top: 40%; left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -15s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(5%, 10%) scale(1.1); }
+            66% { transform: translate(-10%, 5%) scale(0.9); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+
+        /* -------------------------
+           CURSOR PERSONALIZADO
+        -------------------------- */
+        .custom-cursor {
+            position: fixed;
+            top: 0; left: 0;
+            width: 12px; height: 12px;
+            background: var(--text-primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            mix-blend-mode: difference;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
+        }
+
+        .custom-cursor-follower {
+            position: fixed;
+            top: 0; left: 0;
+            width: 40px; height: 40px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: top 0.15s ease-out, left 0.15s ease-out, width 0.3s, height 0.3s;
+        }
+
+        body.hovering .custom-cursor {
+            width: 50px; height: 50px;
+            background: var(--accent-gold);
+            mix-blend-mode: normal;
+            opacity: 0.2;
+        }
+        body.hovering .custom-cursor-follower {
+            width: 60px; height: 60px;
+            border-color: var(--accent-gold);
+        }
+
+        /* -------------------------
+           TIPOGRAFIA
+        -------------------------- */
+        h1, h2, h3, .serif {
+            font-family: 'Bodoni Moda', serif;
+            font-weight: 400;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 7rem);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 5vw, 4rem);
+            margin-bottom: 2rem;
+            color: var(--accent-gold);
+        }
+
+        .italic-display {
+            font-style: italic;
+            color: var(--accent-rose);
+            padding-right: 0.1em;
+        }
+
+        /* -------------------------
+           LAYOUT E COMPONENTES
+        -------------------------- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5vw;
+        }
+
+        section {
+            padding: 15vh 0;
+            position: relative;
+        }
+
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--glass-highlight), transparent);
+        }
+
+        /* Elementos de revelação ao scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* -------------------------
+           HERO SECTION
+        -------------------------- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-content {
+            z-index: 10;
+        }
+
+        .hero-subtitle {
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            display: block;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            opacity: 0.6;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, var(--text-primary), transparent);
+            animation: scrollLine 2s infinite cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        @keyframes scrollLine {
+            0% { transform: scaleY(0); transform-origin: top; }
+            50% { transform: scaleY(1); transform-origin: top; }
+            50.1% { transform: scaleY(1); transform-origin: bottom; }
+            100% { transform: scaleY(0); transform-origin: bottom; }
+        }
+
+        /* -------------------------
+           MENSAGEM (O ENVELOPE REDESENHADO)
+        -------------------------- */
+        .message-section {
+            display: flex;
+            justify-content: center;
+        }
+
+        .crystal-envelope {
+            max-width: 600px;
+            width: 100%;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            text-align: center;
+        }
+
+        .crystal-envelope:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+            border-color: var(--accent-gold);
+        }
+
+        .envelope-icon {
+            font-size: 2.5rem;
+            color: var(--accent-rose);
+            margin-bottom: 1.5rem;
+        }
+
+        .letter-content {
+            display: none;
+            opacity: 0;
+            padding-top: 2rem;
+            border-top: 1px solid var(--glass-border);
+            margin-top: 2rem;
+            transition: opacity 1s ease;
+        }
+
+        .letter-content.open {
+            display: block;
+            opacity: 1;
+        }
+
+        .typewriter-text {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 1.5rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+            text-align: left;
+            min-height: 150px;
+        }
+
+        .typewriter-text span {
+            opacity: 0;
+            animation: fadeIn 0.1s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* -------------------------
+           NOSSA HISTÓRIA (TIMELINE ASSIMÉTRICA)
+        -------------------------- */
+        .story-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 4rem;
+            margin-top: 4rem;
+        }
+
+        @media (min-width: 768px) {
+            .story-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+            .story-item:nth-child(even) {
+                margin-top: 6rem;
+            }
+        }
+
+        .story-item {
+            position: relative;
+        }
+
+        .story-date {
+            font-family: 'Bodoni Moda', serif;
+            font-style: italic;
+            font-size: 1.5rem;
+            color: var(--accent-rose);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .story-image-placeholder {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(45deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+            border-radius: 12px;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border: 1px dashed var(--glass-border);
+        }
+
+        /* -------------------------
+           GALERIA (ESTILO MAGAZINE)
+        -------------------------- */
+        .gallery-masonry {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-auto-rows: 150px;
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .gallery-item {
+            border-radius: 16px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            z-index: 2;
+            border-color: var(--accent-gold);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .gallery-item:nth-child(1) { grid-row: span 2; grid-column: span 2; }
+        .gallery-item:nth-child(4) { grid-row: span 2; }
+        .gallery-item:nth-child(5) { grid-column: span 2; }
+
+        /* -------------------------
+           MUSIC PLAYER
+        -------------------------- */
+        .music-player {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            z-index: 100;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: var(--transition-smooth);
+        }
+
+        .music-player:hover {
+            border-color: var(--accent-rose);
+        }
+
+        .play-btn {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: var(--text-primary);
+            color: var(--bg-base);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            font-size: 1.2rem;
+            padding-left: 3px; /* visual center for play icon */
+            transition: transform 0.3s;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .song-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .song-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .song-artist {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Ícones em falta - simulados com CSS para evitar dependências */
+        .icon-play::before { content: '▶'; }
+        .icon-pause::before { content: '⏸'; }
+
+    </style>
+</head>
+<body>
+
+    <!-- Filtro de Grão e Fundo Animado -->
+    <div class="noise-overlay"></div>
+    <div class="ambient-bg">
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+    </div>
+
+    <!-- Cursores -->
+    <div class="custom-cursor" id="cursor"></div>
+    <div class="custom-cursor-follower" id="cursor-follower"></div>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero container">
+            <div class="hero-content reveal">
+                <span class="hero-subtitle">Uma Coleção de Momentos</span>
+                <h1>Para Alguém <br><span class="italic-display">Especial</span></h1>
+            </div>
+            
+            <div class="scroll-indicator">
+                <span style="font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase;">Descobrir</span>
+                <div class="scroll-line"></div>
+            </div>
+        </section>
+
+        <!-- Seção da Carta de Cristal -->
+        <section id="message" class="container message-section">
+            <div class="glass-panel crystal-envelope reveal interactive" id="envelopeCard">
+                <div class="envelope-icon">✧</div>
+                <h2>Uma Mensagem <br><span class="italic-display">Para Ti</span></h2>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">(Clica para revelar)</p>
+                
+                <div class="letter-content" id="letterContent">
+                    <div class="typewriter-text" id="typingContainer"></div>
+                    <p style="margin-top: 2rem; font-family: 'Bodoni Moda', serif; font-style: italic; color: var(--accent-gold); text-align: right;">Com todo o carinho,</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Linha do Tempo / Memórias -->
+        <section id="timeline" class="container">
+            <h2 class="reveal text-center" style="text-align: center;">Nossa <span class="italic-display">História</span></h2>
+            
+            <div class="story-grid">
+                <div class="glass-panel story-item reveal">
+                    <span class="story-date">O Início</span>
+                    <h3>Onde tudo começou</h3>
+                    <p style="color: var(--text-secondary); margin-top: 1rem;">O momento em que os nossos caminhos se cruzaram e a narrativa mudou para sempre.</p>
+                    <div class="story-image-placeholder">[Imagem do Primeiro Encontro]</div>
+                </div>
+                
+                <div class="glass-panel story-item reveal">
+                    <span class="story-date">Aventuras</span>
+                    <h3>Momentos inesquecíveis</h3>
+                    <p style="color: var(--text-secondary); margin-top: 1rem;">Risos partilhados, viagens não planeadas e memórias que guardamos como tesouros.</p>
+                    <div class="story-image-placeholder">[Imagem de Viagem/Aventura]</div>
+                </div>
+                
+                <div class="glass-panel story-item reveal">
+                    <span class="story-date">Presente</span>
+                    <h3>Crescendo juntos</h3>
+                    <p style="color: var(--text-secondary); margin-top: 1rem;">A beleza do quotidiano partilhado e a certeza de ter encontrado alguém singular.</p>
+                    <div class="story-image-placeholder">[Imagem Recente]</div>
+                </div>
+                
+                <div class="glass-panel story-item reveal">
+                    <span class="story-date">Futuro</span>
+                    <h3>O que está por vir</h3>
+                    <p style="color: var(--text-secondary); margin-top: 1rem;">O melhor ainda está por escrever. Ansioso pelos próximos capítulos desta história.</p>
+                    <div class="story-image-placeholder">[Espaço para Futuras Memórias]</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Galeria Editorial -->
+        <section id="gallery" class="container" style="margin-bottom: 15vh;">
+            <h2 class="reveal">Fragmentos de <br><span class="italic-display">Tempo</span></h2>
+            
+            <div class="gallery-masonry reveal">
+                <div class="gallery-item interactive">[Imagem de Destaque 1]</div>
+                <div class="gallery-item interactive">[Foto 2]</div>
+                <div class="gallery-item interactive">[Foto 3]</div>
+                <div class="gallery-item interactive">[Imagem Vertical 4]</div>
+                <div class="gallery-item interactive">[Imagem Panorâmica 5]</div>
+                <div class="gallery-item interactive">[Foto 6]</div>
+                <div class="gallery-item interactive">[Foto 7]</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Player de Música Glassmórfico -->
+    <div class="music-player interactive">
+        <button class="play-btn" id="playBtn" aria-label="Play/Pause">
+            <span class="icon-play" id="playIcon"></span>
+        </button>
+        <div class="song-info">
+            <span class="song-title">A Nossa Canção</span>
+            <span class="song-artist">Banda / Artista</span>
+        </div>
+        <!-- Áudio oculto (Substitua o src pelo link da música) -->
+        <audio id="bgMusic" loop>
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <script>
+        // 1. Lógica do Cursor Personalizado
+        const cursor = document.getElementById('cursor');
+        const follower = document.getElementById('cursor-follower');
+        const interactives = document.querySelectorAll('a, button, .interactive, .crystal-envelope');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            // Suaviza o seguidor
+            setTimeout(() => {
+                follower.style.left = e.clientX + 'px';
+                follower.style.top = e.clientY + 'px';
+            }, 50);
+        });
+
+        interactives.forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+        });
+
+        // 2. Animação de Revelação ao Fazer Scroll (Intersection Observer)
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // Só anima uma vez
+                }
+            });
+        }, {
+            root: null,
+            threshold: 0.15, // Aciona quando 15% do elemento estiver visível
+            rootMargin: "0px 0px -50px 0px"
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // 3. Lógica da Carta de Cristal (Envelope) e Efeito de Máquina de Escrever
+        const envelopeCard = document.getElementById('envelopeCard');
+        const letterContent = document.getElementById('letterContent');
+        const typingContainer = document.getElementById('typingContainer');
+        let isOpen = false;
+        let isTyping = false;
+
+        const messageText = "Queria preparar algo diferente para ti. Algo que refletisse a elegância e a luz que trazes para a minha vida. Que este pequeno espaço digital seja um lembrete do quão especial és para mim, hoje e sempre.";
+
+        envelopeCard.addEventListener('click', () => {
+            if (isOpen) return; // Só abre uma vez
+            
+            isOpen = true;
+            envelopeCard.style.cursor = 'default';
+            letterContent.classList.add('open');
+            envelopeCard.querySelector('p').style.display = 'none'; // Esconde o texto "Clica para revelar"
+            
+            // Inicia o efeito de digitação após a animação de abertura
+            setTimeout(() => {
+                if (!isTyping) typeMessage();
+            }, 500);
+        });
+
+        function typeMessage() {
+            isTyping = true;
+            let index = 0;
+            
+            function type() {
+                if (index < messageText.length) {
+                    const span = document.createElement('span');
+                    span.textContent = messageText[index];
+                    // Adiciona um pequeno atraso de animação para o fade in
+                    span.style.animationDelay = (index * 0.01) + 's';
+                    typingContainer.appendChild(span);
+                    index++;
+                    
+                    // Velocidade de digitação variável para parecer natural
+                    let typeSpeed = Math.random() * 30 + 20;
+                    if(messageText[index] === '.' || messageText[index] === ',') typeSpeed += 200;
+                    
+                    setTimeout(type, typeSpeed);
+                }
+            }
+            type();
+        }
+
+        // 4. Lógica do Player de Música
+        const playBtn = document.getElementById('playBtn');
+        const playIcon = document.getElementById('playIcon');
+        const bgMusic = document.getElementById('bgMusic');
+        let isPlaying = false;
+
+        playBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                playIcon.className = 'icon-play';
+                playBtn.style.paddingLeft = '3px'; // Ajuste visual para play
+            } else {
+                bgMusic.play();
+                playIcon.className = 'icon-pause';
+                playBtn.style.paddingLeft = '0'; // Centralizado para pause
+            }
+            isPlaying = !isPlaying;
+        });
+    </script>
+</body>
+</html>
